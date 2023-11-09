@@ -63,7 +63,6 @@ const Navbar = () => {
       console.log(token)
 
     }
-    
   },[]);
 
   const handleLogout = () => {

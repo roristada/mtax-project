@@ -64,7 +64,7 @@ const Home = () => {
         </div>
         <div className="w-[50%] flex justify-end">
           <img
-            className="object-cover w-[80%] h-auto  rounded-full"
+            className="object-cover w-[80%] h-[80%]  rounded-full"
             src="images\bussiness.jpg"
           />
         </div>

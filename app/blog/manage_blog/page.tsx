@@ -67,7 +67,7 @@ const manage_blog = () => {
                         {post.id_blog}
                       </td>
                       <td className="px-6 py-4">{post.header}</td>
-                      <td className="px-6 py-4" dangerouslySetInnerHTML={{__html:post.detail.substring(0,20)}}/>
+                      <td className="px-6 py-4" dangerouslySetInnerHTML={{__html:post.detail.substring(0,30)}}/>
                       <td className="px-6 py-4">{post.staff}</td>
                       <td className="px-6 py-4">{post.datepost}</td>
                       
