@@ -13,13 +13,12 @@ interface User {
 
 const login = () => {
   const router = useRouter();
-  const token = document.cookie;
-
-  if (token) {
-    useEffect(() => {
+  useEffect(() => {
+    const token = document.cookie;
+    if (token) {
       router.push('/profile');
-    }, []); // Empty dependency array ensures the effect runs once after the initial render
-  }
+    }
+  }, []);
   
   const [user, setUser] = useState({
     email: "",
@@ -41,13 +40,13 @@ const login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("User login successfully");
-        console.log(data.user); // You can access user data here
+        //console.log(data.user); 
         router.push("/profile");
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData.error);
         setError(errorData.error);
-        // Handle login failure, show error to the user, etc.
+        
       }
     } catch (err) {
       console.error("Error during login:", err);

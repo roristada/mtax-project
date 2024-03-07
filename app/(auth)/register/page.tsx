@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 const register = () => {
+  
   const router = useRouter();
   const [user, setUser] = useState({
     email: "",
@@ -21,11 +22,11 @@ const register = () => {
     telephone: "",
     role: "",
   });
-
+  const [checkEmail, setcheckEmail] = useState(true)
+  const errorMessage = `Email "${user.email}" is already in use.`;
   const [passwordMatchError, setPasswordMatchError] = useState(false);
   //console.log(user);
   const handleSubmit = async (event: any) => {
-    
     event.preventDefault();
     if (user.password !== user.c_password) {
       setPasswordMatchError(true);
@@ -44,10 +45,18 @@ const register = () => {
         },
         body: JSON.stringify(user1),
       });
+      
+        if (response.status === 400) {
+        setcheckEmail(false)
+        //alert(errorMessage);
+        return;
+      }
+      
+      
+
       if (response.ok) {
         console.log("User registered successfully");
-        router.push('/login')
-        
+        router.push("/login");
       } else {
         console.error("Registration failed:", response.statusText);
         // Handle registration failure, show error to the user, etc.
@@ -85,9 +94,15 @@ const register = () => {
                 className="mx-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Example@example.com"
                 value={user.email}
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                onChange={(e) => {
+                  setUser({ ...user, email: e.target.value });
+                  setcheckEmail(true);
+                }}
                 required
               />
+              <div className="error-message">
+                {!checkEmail && <p className=" text-red-600">{errorMessage}</p>}
+              </div>
             </div>
 
             <div className="my-3 w-[80%] mx-auto">

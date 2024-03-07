@@ -8,25 +8,38 @@ const post_blog = () => {
     detail: "",
     staff: "",
     image: "",
-    datepost: "",
+    //datepost: "",
   });
 
   const handleEditorContentChange = (html: string) => {
     setformPost({ ...formPost, detail: html });
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString(); // Adjust the format as needed
+    //const currentDate = new Date();
+    //const formattedDate = currentDate.toISOString(); // Adjust the format as needed
 
     // Update the formPost state with the current date
-    setformPost({ ...formPost, datepost: formattedDate });
+    //setformPost({ ...formPost, datepost: formattedDate });
+
+    try {
+      const response = await fetch("/api/post-blog", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formPost),
+      });
+      if (response.ok) {
+        console.log("Post successfully");
+      } else {
+        console.error("Post failed:", response.statusText);
+      }
+    } catch (err) {
+      console.error("Error :", err);
+    }
   };
-  useEffect(() => {
-    // Use this effect to log the updated state
-    console.log(formPost);
-  }, [formPost]); // Run this effect whenever formPost changes
 
   return (
     <div className=" w-full h-full bg-slate-700 py-10">

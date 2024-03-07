@@ -1,6 +1,8 @@
+"use client";
 import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
+import { useState, useEffect } from "react";
 
 export const metadata: Metadata = {
   title: "Blog Knowledge",
@@ -8,6 +10,21 @@ export const metadata: Metadata = {
 };
 
 const blog = () => {
+  const [data, setData] = useState([]);
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/post-blog");
+      const result = await response.json();
+      setData(result);
+      console.log(data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className="h-full">
       <div className="w-full bg-[url('/images/Meteor.svg')] h-[400px] flex justify-center items-center">
@@ -29,101 +46,26 @@ const blog = () => {
         <div className="w-[80%] mx-auto mt-10 mb-3 col-span-6">
           <h2 className=" text-3xl border-b-2 pb-3 ">Blog</h2>
           <div className="grid grid-cols-4 gap-10 mt-8 max-w-7xl mx-auto">
-            <div className=" rounded-lg shadow-lg">
-              <Image
-                className="rounded"
-                src={"/images/scott-graham-5fNmWej4tAA-unsplash.jpg"}
-                width={400}
-                height={400}
-                alt="img"
-              ></Image>
-              <h2 className="text-xl font-medium mt-3 px-5">Articles</h2>
-              <h4 className="px-5 pb-5">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Perferendis amet, odio adipisci corrupti sunt tenetur officiis
-              </h4>
-              <div className="flex justify-end mb-2 mr-4">
-                <h2 className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
-                  Readmore
-                </h2>
+            {data.map((post: any) => (
+              <div className=" rounded-lg shadow-lg">
+                <Image
+                  className="rounded"
+                  src={"/images/scott-graham-5fNmWej4tAA-unsplash.jpg"}
+                  width={400}
+                  height={400}
+                  alt="img"
+                ></Image>
+                <h2 className="text-xl font-medium mt-3 px-5">{post.header}</h2>
+                <h4 className="px-5 pb-5" dangerouslySetInnerHTML={{__html:post.detail.substring(0,100)}}/>
+                
+                <div className="flex justify-end mb-2 mr-4">
+                  <h2 className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
+                    Readmore
+                  </h2>
+                </div>
               </div>
-            </div>
-            <div className=" rounded-lg shadow-lg">
-              <Image
-                className="rounded"
-                src={"/images/scott-graham-5fNmWej4tAA-unsplash.jpg"}
-                width={400}
-                height={400}
-                alt="img"
-              ></Image>
-              <h2 className="text-xl font-medium mt-3 px-5">Articles</h2>
-              <h4 className="px-5 pb-5">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Perferendis amet, odio adipisci corrupti sunt tenetur officiis
-              </h4>
-              <div className="flex justify-end mb-2 mr-4">
-                <h2 className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
-                  Readmore
-                </h2>
-              </div>
-            </div>
-            <div className=" rounded-lg shadow-lg">
-              <Image
-                className="rounded"
-                src={"/images/scott-graham-5fNmWej4tAA-unsplash.jpg"}
-                width={400}
-                height={400}
-                alt="img"
-              ></Image>
-              <h2 className="text-xl font-medium mt-3 px-5">Articles</h2>
-              <h4 className="px-5 pb-5">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Perferendis amet, odio adipisci corrupti sunt tenetur officiis
-              </h4>
-              <div className="flex justify-end mb-2 mr-4">
-                <h2 className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
-                  Readmore
-                </h2>
-              </div>
-            </div>
-            <div className=" rounded-lg shadow-lg">
-              <Image
-                className="rounded"
-                src={"/images/scott-graham-5fNmWej4tAA-unsplash.jpg"}
-                width={400}
-                height={400}
-                alt="img"
-              ></Image>
-              <h2 className="text-xl font-medium mt-3 px-5">Articles</h2>
-              <h4 className="px-5 pb-5">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Perferendis amet, odio adipisci corrupti sunt tenetur officiis
-              </h4>
-              <div className="flex justify-end mb-2 mr-4">
-                <h2 className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
-                  Readmore
-                </h2>
-              </div>
-            </div>
-            <div className=" rounded-lg shadow-lg">
-              <Image
-                className="rounded"
-                src={"/images/scott-graham-5fNmWej4tAA-unsplash.jpg"}
-                width={400}
-                height={400}
-                alt="img"
-              ></Image>
-              <h2 className="text-xl font-medium mt-3 px-5">Articles</h2>
-              <h4 className="px-5 pb-5">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Perferendis amet, odio adipisci corrupti sunt tenetur officiis
-              </h4>
-              <div className="flex justify-end mb-2 mr-4">
-                <h2 className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
-                  Readmore
-                </h2>
-              </div>
-            </div>
+            ))}
+
           </div>
         </div>
         <div className="grid grid-rows-2 gap-3 w-full h-full mb-5 gap-y-16">
