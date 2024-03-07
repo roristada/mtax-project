@@ -22,12 +22,12 @@ const links = [
   {
     id: 2,
     title: "About",
-    url: "/about",
+    url: "#about",
   },
   {
     id: 3,
     title: "Services",
-    url: "/Services",
+    url: "#service",
   },
   {
     id: 4,
@@ -37,7 +37,7 @@ const links = [
   {
     id: 5,
     title: "Contact",
-    url: "/Contact",
+    url: "#contact",
   },
   {
     id: 6,
@@ -75,8 +75,9 @@ const Navbar = () => {
   return (
     <nav className=" bg-white border-gray-200 shadow-md">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-5">
-        <Link className="text-2xl font-medium" href="/">
-          Mtax
+        <Link className="text-2xl font-medium" href="#">
+          <span className="text-blue-500">M</span>
+          <span className="text-red-500">tax</span>
         </Link>
         <div className="hidden. w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white ">

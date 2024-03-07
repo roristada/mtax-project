@@ -13,23 +13,16 @@ const Header = () => {
           </h1>
 
           <p className=" text-xl mb-10">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe
-            consectetur, doloribus rerum sequi odit earum quos aspernatur
-            aperiam, exercitationem harum nulla a illo? Accusamus, repudiandae
-            quos qui quia error, culpa exercitationem ab illo libero ad dolores
-            perspiciatis, iste beatae veritatis rem rerum voluptas amet esse
-            suscipit doloribus odio quibusdam illum! Voluptatibus ratione,
-            laboriosam atque sint, nihil nemo sequi reprehenderit provident odit
-            sunt, omnis quo officia nisi quas cupiditate iure ipsa asperiores id
-            vitae natus neque architecto harum dignissimos quam? Quas totam
-            eius, provident dolor repellat, consequuntur unde ea labore alias
-            enim sunt maiores, quia vero. Ducimus consequatur accusantium dolor
-            tempore?
+            Mtax เราเป็นหนึ่งบริษัทผู้ให้บริการงานบันทึกบัญชีออนไลน์ (Online Accounting) , <br></br>งานด้านบัญชีภาษี (Tax Accounting) , งานด้านบัญชีการเงิน (Financial Accounting) งานด้านบัญชีบริหาร (Management Accounting)
+            , งานด้านเงินเดือนพนักงาน (Payroll Outsourcing) , จัดตั้งบริษัท (Business Startup) 
+            เราให้บริการเสมือนเป็นส่วนหนึ่งของทีมกิจการท่าน เราพร้อมก้าวเดินและเติบโตไปพร้อมกัน เราจะเป็นฟันเฟืองตัวหนึ่งของกิจการ
+            เราจะรักษาผลประโยชน์ของกิจการท่านเป็นสิ่งที่เราคำนึงถึงเป็นอันดับแรก
+            เรามีทีมงานที่มีคุณภาพและพัฒนาอย่างต่อเนื่องเพื่อพร้อมให้คำปรึกษาและดูแลงานที่  รับผิดชอบอย่างเต็มประสิทธิภาพ
           </p>
           <div className="flex justify-center w-[90%] ">
             <img
               className=" w-16 h-auto rounded-full mx-3"
-              src="images\partner.png"
+              src="images\partner0.jpg"
             />
             <img
               className="w-16 h-auto rounded-full mx-3"
@@ -37,11 +30,11 @@ const Header = () => {
             />
             <img
               className="w-16 h-auto rounded-full mx-3"
-              src="images\partner1.png"
+              src="images\partner2.jpg"
             />
             <img
               className="w-16 h-auto rounded-full mx-3"
-              src="images\partner1.png"
+              src="images\partner3.jpg"
             />
           </div>
           <div className="w-[100%] mt-10 flex ">
