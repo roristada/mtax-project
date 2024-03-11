@@ -58,7 +58,7 @@ class Editor extends Component<EditorProps, EditorState> {
     if (newTheme === 'core') newTheme = 'snow';
     this.setState({ theme: newTheme });
   }
-
+  
   render() {
     return (
       <div className=' bg-slate-50'>

@@ -20,23 +20,44 @@ const Header = () => {
             เรามีทีมงานที่มีคุณภาพและพัฒนาอย่างต่อเนื่องเพื่อพร้อมให้คำปรึกษาและดูแลงานที่  รับผิดชอบอย่างเต็มประสิทธิภาพ
           </p>
           <div className="flex justify-center w-[90%] ">
-            <img
-              className=" w-16 h-auto rounded-full mx-3"
-              src="images\partner0.jpg"
-            />
-            <img
-              className="w-16 h-auto rounded-full mx-3"
-              src="images\partner1.png"
-            />
-            <img
-              className="w-16 h-auto rounded-full mx-3"
-              src="images\partner2.jpg"
-            />
-            <img
-              className="w-16 h-auto rounded-full mx-3"
-              src="images\partner3.jpg"
-            />
+              <a href="https://flowaccount.com" target="_blank">
+                  <img
+                    className="w-16 h-auto rounded-full mx-3"
+                    src="images\partner0.jpg"
+                  />
+              </a>
+              <a href="https://www.myaccount-cloud.com" target="_blank">
+                  <img
+                    className="w-16 h-auto rounded-full mx-3"
+                    src="images\partner1.jpg"
+                  />
+              </a>
+              <a href="https://peakaccount.com/main.html" target="_blank">
+                  <img
+                    className="w-16 h-auto rounded-full mx-3"
+                    src="images\partner5.jpg"
+                  />
+              </a>
+              <a href="https://www.tfac.or.th/" target="_blank">
+                  <img
+                    className="w-16 h-auto rounded-full mx-3"
+                    src="images\partner3.jpg"
+                  />
+              </a>
+              <a href="https://www.thaitrade.com/home" target="_blank">
+                  <img
+                    className="w-16 h-auto rounded-full mx-3"
+                    src="images\partner4.jpg"
+                  />
+              </a>
+              <a href="https://ereg.dbd.go.th/ERegistMemberWeb/nonmemberpages/home.xhtml" target="_blank">
+                  <img
+                    className="w-16 h-auto rounded-full mx-3"
+                    src="images\partner2.jpg"
+                  />
+              </a>
           </div>
+
           <div className="w-[100%] mt-10 flex ">
             <button
               type="button"

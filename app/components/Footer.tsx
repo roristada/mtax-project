@@ -28,10 +28,10 @@ const Footer = () => {
                   <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Our Partner</h2>
                   <ul className="text-gray-500 dark:text-gray-400 font-medium">
                       <li className="mb-4">
-                          <a href="https://flowaccount.com" className="hover:underline ">Flowaccount.com</a>
+                          <a href="https://flowaccount.com" className="hover:underline ">FlowAccount</a>
                       </li>
                       <li>
-                          <a href="https://www.thaitrade.com/home" className="hover:underline">Thaitrade.com</a>
+                          <a href="https://www.myaccount-cloud.com" className="hover:underline">myAccount</a>
                       </li>
                   </ul>
               </div>
@@ -42,7 +42,7 @@ const Footer = () => {
                           <a href="https://ereg.dbd.go.th" className="hover:underline">DBD Register</a>
                       </li>
                       <li>
-                          <a href="https://www.trcloud.co" className="hover:underline">trcloud</a>
+                          <a href="https://peakaccount.com/main.html" className="hover:underline">peakAccount</a>
                       </li>
                   </ul>
               </div>

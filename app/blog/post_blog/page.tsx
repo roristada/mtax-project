@@ -11,8 +11,8 @@ const post_blog = () => {
     //datepost: "",
   });
 
-  const handleEditorContentChange = (html: string) => {
-    setformPost({ ...formPost, detail: html });
+  const handleEditorContentChange = (detail: string) => {
+    setformPost({ ...formPost, detail });
   };
 
   const handleSubmit = async (event: any) => {

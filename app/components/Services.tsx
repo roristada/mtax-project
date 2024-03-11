@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from "next/link";
 
 const Services = () => {
   return (
@@ -14,12 +15,12 @@ const Services = () => {
             - ภายใน 24 ชม. หลังส่งเอกสาร สามารถเรียกดูและออกงบการเงินได้ และสามารถ drill down เอกสาร 
           </p>
           <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-100 mt-auto w-full">
-            <a className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
+            <Link href="/service_sub/online" className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
               <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14"></path>
                 <path d="M12 5l7 7-7 7"></path>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
         <div className="p-12 md:w-1/2 flex flex-col items-start">
@@ -30,12 +31,12 @@ const Services = () => {
             - การเตรียมไฟล์สำหรับส่งให้ธนาคาร <br />
             - การยื่นแบบ ภงด.90,91 พร้อมใบคำนวณภาษีสำหรับพนักงาน</p>
           <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-100 mt-auto w-full">
-            <a className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
+            <Link href="/service_sub/payroll" className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
               <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14"></path>
                 <path d="M12 5l7 7-7 7"></path>
               </svg>
-            </a>
+            </Link>
           </div>  
         </div>
         <div className="p-12 md:w-1/2 flex flex-col items-start">
@@ -45,12 +46,12 @@ const Services = () => {
             - Financial Accounting รับทำบัญชีปิดบัญชีรายเดือน เน้นความถูกต้องตามมาตรฐานบัญชี กระทบยอดเงินฝากธนาคาร ให้ความสำคัญกับกระแสเงินสดของกิจการเป็นสำคัญ <br />
             - Management Accounting รับทำบัญชีบริหาร เป็นงานต่อเนื่องจาก Financial Accounting โดยนำเสนอข้อมูลให้ผู้บริหารในรูปแบบ Dashboard,Infographic,PowerPoint</p>
           <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-100 mt-auto w-full">
-            <a className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
+            <Link href="\pdf\book.pdf" target="_blank" className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
               <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14"></path>
                 <path d="M12 5l7 7-7 7"></path>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
         <div className="p-12 md:w-1/2 flex flex-col items-start">
@@ -62,12 +63,12 @@ const Services = () => {
             - ให้คำปรึกษาด้านกฎหมายการค้าที่สำคัญกับกิจการ <br />
             - รับเปลี่ยนแปลงนิติบุคคลเดิม การเพิ่มทุน การเปลี่ยนอำนาจกรรมการ การเปลี่ยนชื่อบริษัท การเปลี่ยนวัตถุประสงค์ของกิจการ การจดทะเบียนภาษีมูลค่าเพิ่ม</p>
           <div className="flex items-center flex-wrap pb-4 mb-4 border-b-2 border-gray-100 mt-auto w-full">
-            <a className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
+            <Link href="/service_sub/business" className="text-indigo-500 inline-flex items-center">รายละเอียดเพิ่มเติม
               <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14"></path>
                 <path d="M12 5l7 7-7 7"></path>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

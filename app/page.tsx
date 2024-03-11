@@ -14,7 +14,6 @@ const Home = () => {
       <Header/>
       <About/>
       <Services/>
-      <Ourteam/>
       <Contact/>
       <Footer/>
     </main>
@@ -22,3 +21,4 @@ const Home = () => {
 };
 
 export default Home;
+

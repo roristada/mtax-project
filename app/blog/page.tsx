@@ -34,10 +34,7 @@ const blog = () => {
           </label>
           <div className="mt-3">
             <label className="text-white text-xl">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente,
-              animi voluptas commodi laboriosam atque unde optio molestiae
-              suscipit, accusantium facere quod exercitationem a ad itaque?
-              Beatae, tempore? Tenetur, dolores natus.
+              ให้ความรู้ด้านบัญชี ภาษี และด้านวิชาการต่างๆ
             </label>
           </div>
         </div>
