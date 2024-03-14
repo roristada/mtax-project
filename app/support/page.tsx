@@ -16,39 +16,63 @@ interface User {
   email: string;
   role: string;
   exp: string;
-  company:string
+  company: string;
 }
 
-
 const employee = () => {
-  let roomIdInput = ''
-  
+  let roomIdInput = "";
+
   const token = Cookies.get("token");
   const route = useRouter();
   const [isClient, setIsClient] = useState(false);
   const [user, setUser] = useState("");
-  const [user_id , setUserid] = useState("")
+  const [user_id, setUserid] = useState("");
+  const [room , setRoom] = useState([])
 
   const createRoom = async () => {
     if (!user_id) {
-      console.error('User ID is required to create a room');
+      console.error("User ID is required to create a room");
       return;
     }
-    
+
     try {
       // Ensure this matches the exported API route from the backend.
-      const response = await axios.post('/api/Chat/room_create', { user_id });
+      const response = await axios.post("/api/chat/room_create", { user_id });
       const { roomId } = response.data;
-      console.log(roomId)
+      console.log(roomId);
       route.push(`/support/room/${roomId}`);
     } catch (error) {
-      console.error('There was an error creating the room:', error);
+      console.error("There was an error creating the room:", error);
     }
   };
 
   const joinRoom = async (roomId: string) => {
-    route.push(`/support/room/${roomId}`)
-  }
+    route.push(`/support/room/${roomId}`);
+  };
+
+  const fetchroom = async () => {
+    try {
+      const res = await fetch("/api/chat/allroom", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        console.error("Failed to fetch:", res.statusText);
+        return;
+      }
+
+      const room = await res.json();
+      setRoom(room.result);
+
+      console.log("room", room);
+    } catch (err) {
+      console.log(err);
+      alert("Error to fetchroom");
+    }
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -60,17 +84,13 @@ const employee = () => {
         console.log(decoded);
         if (isExpired) {
           Cookies.remove("token");
-          route.push("/login");
         } else {
-
           if (decoded.role == "user") {
             setUser(decoded.role);
-            setUserid(decoded.id)
-            
-
+            setUserid(decoded.id);
           } else if (decoded.role == "admin") {
             setUser(decoded.role);
-            route.push("/support");
+            fetchroom();
           } else {
             route.push("/");
           }
@@ -78,10 +98,8 @@ const employee = () => {
       } catch (error) {
         // If token is invalid or expired
         console.error("Invalid token:", error);
-        route.push("/login"); // Redirect to login page
+        // Redirect to login page
       }
-    } else {
-      route.push("/login"); // Redirect to login page if token not found
     }
   }, [route, token]);
 
@@ -93,22 +111,39 @@ const employee = () => {
             <Sidebar />
             <div className="flex-1 p-4">
               <Topbar />
-              <div className="grid md:grid-cols-3 gap-20 w-fulส"></div>
+              <div className="grid md:grid-cols-3 gap-20 w-full"></div>
 
               {user === "admin" ? (
-                <AdminChat />
+                <div className="bg-slate-200 flex justify-center p-6 rounded-lg">
+                  <div className="grid grid-cols-8 sm:grid-cols-5 gap-4">
+                    {room.map((room:any) => (
+                      <div key={room.id} className="mb-4 bg-teal-100 p-5 rounded-lg">
+                        <h2>Room ID :{room.id}</h2>
+                        <h2>User: {room.user_id}</h2>
+                        <button
+                          onClick={() => joinRoom(room.id)}
+                          className="p-3 bg-blue-200 rounded-lg mt-2"
+                        >
+                          Joinroom
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               ) : user === "user" ? (
-                <div>
+                <div className="bg-slate-200 flex justify-center p-6 rounded-lg">
                   <div>
-                    <button onClick={createRoom}>Create room</button>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        onChange={({ target }) => (roomIdInput = target.value)}
-                        className="border border-zinc-300"
-                      />
-
-                      <button onClick={() => joinRoom(roomIdInput)}>
+                    <button
+                      onClick={createRoom}
+                      className="p-3 bg-blue-200 rounded-lg"
+                    >
+                      Create room
+                    </button>
+                    <div className="flex justify-center mt-4">
+                      <button
+                        onClick={() => joinRoom(user_id)}
+                        className="p-3 bg-green-300 rounded-lg"
+                      >
                         Join room
                       </button>
                     </div>

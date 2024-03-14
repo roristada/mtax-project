@@ -1,5 +1,6 @@
 "use client";
 
+import dayjs from "dayjs";
 import { useState, useEffect } from "react";
 interface Appointment {
   id_appointment: number;
@@ -149,9 +150,9 @@ const manage = () => {
                         {item.id_appointment}
                       </td>
                       <td className="px-6 py-4">{item.name}</td>
-                      <td className="px-6 py-4">{item.date_app}</td>
-                      <td className="px-6 py-4">{item.time_app}</td>
-                      <td className="px-6 py-4">{item.time_end}</td>
+                      <td className="px-6 py-4">{dayjs(item.date_app).format('YYYY-MM-DD')}</td>
+                      <td className="px-6 py-4">{dayjs(item.time_app).format('HH:mm')}</td>
+                      <td className="px-6 py-4">{dayjs(item.time_end).format('HH:mm')}</td>
                       <td className="px-6 py-4">{item.staff}</td>
                       <td className="px-6 py-4">{item.note_app}</td>
                       <td className="px-6 py-4">{item.status_app}</td>

@@ -1,18 +1,19 @@
-import pool from '@/utils/db';
-import { pusherServer } from '@/lib/pusher'
+import pool from "@/utils/db";
+import { pusherServer } from "@/app/lib/pusher";
 
 export async function POST(req: Request) {
-  const { text, roomId } = await req.json()
+  const { text, roomId , username } = await req.json();
+  console.log(text , roomId ,username)
 
-  pusherServer.trigger(roomId, 'incoming-message', text)
+  await pusherServer.trigger(roomId, "incoming-message", { text, user: username });
+
   const connection = await pool.getConnection();
-
   const [result] = await connection.execute(
-    'INSERT INTO message (content , chatRoomId) VALUES (?,?)',
-    [text, roomId]
+    "INSERT INTO message (content, chatRoomId,user_msg) VALUES (?, ?, ?)",
+    [text, roomId ,username]
   );
+  connection.release();
 
-    connection.release()
 
-  return new Response(JSON.stringify({ success: true }))
+  return new Response(JSON.stringify({ success: true }));
 }

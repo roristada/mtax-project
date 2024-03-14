@@ -21,6 +21,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment-timezone";
 import { Suspense } from "react";
 import Loading from "./loading";
+import dayjs from "dayjs";
 
 interface User {
   id: number;
@@ -69,10 +70,17 @@ const admin_db = () => {
       minute: "2-digit",
       hour12: false, // or false if you prefer 24 hour format
     });
+
+    const endTime = new Date(event.end).toLocaleString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // or false if you prefer 24 hour format
+    });
+    
     return (
       <div style={eventStyle}>
         <div>{event.title}</div>
-        <div>{startTime}</div>
+        <div>{startTime} - {endTime}</div>
       </div>
     );
   };
@@ -83,22 +91,21 @@ const admin_db = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Assuming you're using token-based authentication
+          Authorization: `Bearer ${token}`,
         },
       });
       const appointments = await response.json();
-      console.log("APi =", appointments);
+      console.log(appointments)
+  
       // Convert appointment dates and times to JavaScript Date objects
-      const events = appointments.map((appointment: any) => ({
-        id: appointment.id, // or any unique identifier
-        title: appointment.name, // or any title you prefer
-        start: moment(appointment.date_app).toString(),
-        end: moment(appointment.time_end).toString(),
-        // Add more properties as needed
+      const events = appointments.map((appointment:any) => ({
+        id: appointment.id_appointment,
+        title: appointment.name,
+        start: appointment.time_app, // Convert to Date object
+        end: appointment.time_end, // Convert to Date object
       }));
-      setMyEventsList(events); // Assuming you have a state to hold your events
-
-      console.log("Events after conversion:", events); // Assuming you have a state to hold your events
+      setMyEventsList(events);
+      
     } catch (error) {
       console.error("Error fetching appointments:", error);
     }
@@ -146,7 +153,7 @@ const admin_db = () => {
     }
   }, [route]);
 
-  //console.log(company)
+  console.log("MyEventsList = " ,MyEventsList)
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>,
