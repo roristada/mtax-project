@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 import { useState, useEffect } from "react";
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: "Blog Knowledge",
@@ -55,10 +56,12 @@ const blog = () => {
                 <h2 className="text-xl font-medium mt-3 px-5">{post.header}</h2>
                 <h4 className="px-5 pb-5" dangerouslySetInnerHTML={{__html:post.detail.substring(0,100)}}/>
                 
-                <div className="flex justify-end mb-2 mr-4">
-                  <h2 className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
-                    Readmore
-                  </h2>
+                <div key={post.id_blog} className="flex justify-end mb-2 mr-4">
+                  <Link href={`/blog/${post.id_blog}`}>
+                    <div className="text-md border-b-2 hover:border-y-cyan-600 cursor-pointer">
+                      Readmore
+                    </div>
+                  </Link>
                 </div>
               </div>
             ))}

@@ -9,7 +9,6 @@ export async function GET(req: NextRequest , context:any) {
       connection.release();
       console.log(context.params.id);
       
-  
       return NextResponse.json(rows);
     } catch (error) {
       console.error("Error fetching data from the database:", error);

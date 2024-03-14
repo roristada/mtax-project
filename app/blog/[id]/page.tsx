@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import DOMPurify from 'dompurify';
 
 export default function TableData({ params }: { params: { id: string } }) {
     const [postData, setPostData] = useState<any>({});
@@ -34,13 +35,13 @@ export default function TableData({ params }: { params: { id: string } }) {
                             src={postData.image || ''}
                         />
                         <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-                            <h2 className="text-sm title-font text-gray-500 tracking-widest">ชื่อคนโพส:{postData.staff}</h2>
+                            <h2 className="text-sm title-font text-gray-500 tracking-widest"></h2>
                             <h1 className="text-gray-900 text-3xl title-font font-medium mb-4">หัวเรื่อง:{postData.header}</h1>
-                            <p className="leading-relaxed">{postData.detail}</p>
+                            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postData.detail) }} />
                             <div className="flex mt-2 items-center pb-5 border-b-2 border-gray-100 mb-4"></div>
                             <div className="flex">
-                                <span className="title-font font-medium text-2xl text-gray-900">
-                                    ชื่อคนโพส: {postData.author}
+                                <span className="text-sm title-font text-gray-500 tracking-widest">
+                                    ชื่อคนโพส: {postData.staff}
                                 </span>
                             </div>
                         </div>
