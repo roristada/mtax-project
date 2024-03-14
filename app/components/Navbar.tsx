@@ -4,13 +4,13 @@ import React from "react";
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/navigation";
-
-
+import Cookies from "js-cookie";
 
 interface User {
   id: number;
   email: string;
   role: string;
+  exp: string;
 }
 
 const links = [
@@ -49,27 +49,34 @@ const links = [
 const Navbar = () => {
   const route = useRouter();
   const [user, setUser] = useState<User | null>(null);
-
+  const [isClient, setIsClient] = useState(false);
+  const token = Cookies.get("token");
 
   useEffect(() => {
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,
-      "$1"
-    );
-    
+    setIsClient(true);
     if (token) {
-      const decodedToken = jwt_decode(token) as User;
-      setUser(decodedToken);
-      console.log(token)
+      try {
+        const decoded: User = jwt_decode(token);
+        const isExpired = Date.parse(decoded.exp) < Date.now();
+        setUser(decoded);
 
+        if (isExpired) {
+          Cookies.remove("token");
+          route.push("/login");
+        }
+      } catch (error) {
+        // If token is invalid or expired
+        console.error("Invalid token:", error);
+        route.push("/login"); // Redirect to login page
+      }
     }
-  },[]);
+  }, [route, token]);
 
   const handleLogout = () => {
-    // Clear the token by setting its expiration to the past
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    setUser(null); // Reset the user state to null after logout
+    Cookies.remove("token"); // Clear the token
+    setUser(null);
     route.push("/");
+    localStorage.setItem("loggedOut", "true"); // Optional: similar logic can be applied for logout
   };
 
   return (
@@ -95,10 +102,15 @@ const Navbar = () => {
             {user ? (
               <li className="my-auto">
                 {user.role === "admin" ? (
-                  
-                  <span className="text-gray-900 mr-2"><Link href={"/profile"}>Admin:{user.email}</Link></span>
+                  <span className="text-gray-900 mr-2">
+                    <Link href={"/profile"}>Admin:{user.email}</Link>
+                  </span>
                 ) : (
-                  <span className="text-gray-900 mr-2">User:{user.email}</span>
+                  <Link href={"/dashboard"}>
+                    <span className="text-gray-900 mr-2">
+                      User:{user.email}
+                    </span>
+                  </Link>
                 )}
                 <button
                   type="button"

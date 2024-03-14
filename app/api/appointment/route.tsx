@@ -15,14 +15,14 @@ export async function POST(req: Request) {
       staff,
       status,
       time_end,
-      recapt_token,
+      //recapt_token,
     } = await req.json();
 
-    const isRecaptchaValid = await verifyRecaptchaToken(recapt_token);
-    if (!isRecaptchaValid) {
-      console.log("Invalid reCAPTCHA token")
-      return new NextResponse("Invalid reCAPTCHA token", { status: 400 });
-    }
+    //const isRecaptchaValid = await verifyRecaptchaToken(recapt_token);
+    // if (!isRecaptchaValid) {
+    //   console.log("Invalid reCAPTCHA token")
+    //   return new NextResponse("Invalid reCAPTCHA token", { status: 400 });
+    // }
 
     const connection = await pool.getConnection();
     const [checkRecords] = await connection.execute(

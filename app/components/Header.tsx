@@ -3,7 +3,7 @@ import React from 'react'
 const Header = () => {
   return (
     <div className=" bg-[#E0F4FF] min-h-[500px] flex justify-center rounded-b-3xl">
-      <div className="w-[80%] py-14 flex">
+      <div className=" container w-[80%] py-14 flex">
         <div className="w-[50%]">
           <h1 className=" text-5xl mb-4 text-[#DA0C81]">
             Mtax

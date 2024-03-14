@@ -30,60 +30,79 @@ const Appointment = () => {
     staff: "",
     status: "Not Complete",
     time_end: "",
-    recapt_token:""
+    // recapt_token:""
   });
 
 //-------------------------------------------------------------------------------------------------------------------------------//
   const [isDateValid, setIsDateValid] = useState(true);
-  const handleDate = (date: any) => {
-    if (date) {
-      //const selectedDate = date.toDate();
-      const selectedDate = new Date(date);
-      const formattedDate = new Date(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate()
-      );
+  // const handleDate = (date: any) => {
+
+  //   if (date) {
+  //     //const selectedDate = date.toDate();
+  //     const selectedDate = new Date(date);
+  //     const formattedDate = new Date(
+  //       selectedDate.getFullYear(),
+  //       selectedDate.getMonth(),
+  //       selectedDate.getDate()
+  //     );
 
       
-      const options = {
-        year: "numeric" as const,
-        month: "2-digit" as const,
-        day: "2-digit" as const,
-      };
-      const formattedDateString = formattedDate.toLocaleDateString(
-        undefined,
-        options
-      );
-      console.log(formattedDateString);
-      const selectedTime = date
-        .toDate()
-        .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  //     const options = {
+  //       year: "numeric" as const,
+  //       month: "2-digit" as const,
+  //       day: "2-digit" as const,
+  //     };
+  //     const formattedDateString = formattedDate.toLocaleDateString(
+  //       undefined,
+  //       options
+  //     );
+  //     console.log(formattedDateString);
+  //     const selectedTime = date
+  //       .toDate()
+  //       .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-      const selectedDateTime = new Date(date);
-      selectedDateTime.setHours(selectedDateTime.getHours() + 2);
+  //     const selectedDateTime = new Date(date);
+  //     selectedDateTime.setHours(selectedDateTime.getHours() + 2);
 
-      const endTime = selectedDateTime.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+  //     const endTime = selectedDateTime.toLocaleTimeString([], {
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //     });
 
-      setAppoint({
-        ...appoint,
-        date_app: formattedDateString,
-        time_app: selectedTime,
-        time_end: endTime,
-      });
-      setIsDateValid(true);
-    } else {
-      setIsDateValid(false);
-    }
-  };
+  //     setAppoint({
+  //       ...appoint,
+  //       date_app: formattedDateString,
+  //       time_app: selectedTime,
+  //       time_end: endTime,
+  //     });
+  //     setIsDateValid(true);
+  //   } else {
+  //     setIsDateValid(false);
+  //   }
+  // };
 
-  const handleRecaptchaChange = (token:any) => {
-    setAppoint({...appoint ,recapt_token: token })
-  };
+  // const handleRecaptchaChange = (token:any) => {
+  //   setAppoint({...appoint ,recapt_token: token })
+  // };
 //-------------------------------------------------------------------------------------------------------------------------------//
+const handleDate = (date: any) => {
+  if (date) {
+    // Format the date and time to an ISO string
+    const startIsoString = date.toISOString() // dayjs object's method
+    const endIsoString = date.add(2, 'hour').toISOString(); // Add 2 hours to start time
+    console.log("test:time =",startIsoString, endIsoString); // Log start and end ISO strings
+
+    setAppoint({
+      ...appoint,
+      date_app: startIsoString,
+      time_app: startIsoString,
+      time_end: endIsoString,
+    });
+    setIsDateValid(true);
+  } else {
+    setIsDateValid(false);
+  }
+};
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -199,12 +218,12 @@ const Appointment = () => {
                 </Select>
               </FormControl>
             </div>
-            <div className="max-w-2xl mx-auto my-2 flex justify-center">
+            {/* <div className="max-w-2xl mx-auto my-2 flex justify-center">
               <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY!}
               onChange={(token) => handleRecaptchaChange(token)}
               ></ReCAPTCHA>
-            </div>
+            </div> */}
             <div className="max-w-2xl mx-auto my-2 flex justify-center">
               
               <button

@@ -4,21 +4,46 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import jwt_decode from "jwt-decode";
+import Navbar from "@/app/components/Navbar";
+import Cookies from "js-cookie";
 
 interface User {
   id: number;
   email: string;
   role: string;
+  exp: string;
 }
 
 const login = () => {
-  const router = useRouter();
+  const route = useRouter();
+  const token = Cookies.get("token");
+  const [isClient, setIsClient] = useState(false);
+  
   useEffect(() => {
-    const token = document.cookie;
+    setIsClient(true);
     if (token) {
-      router.push('/profile');
+      const decoded = jwt_decode(token) as User; // Cast to your User interface
+      const isExpired = Date.parse(decoded.exp) * 1000 < Date.now(); // Multiply by 1000 to convert to milliseconds
+      console.log(isExpired)
+      if (isExpired) {
+        // If the token is expired, redirect to the login page
+        route.push("/login");
+      } else {
+        // If the token is not expired, check the user's role and fetch data
+        console.log(decoded);
+        if (decoded.role === "user") {
+          route.push("/dashboard");
+        } else if (decoded.role === "admin") {
+          route.push("/dashboard/admin_db");
+        } else {
+          route.push("/");
+        }
+      }
+    } else {
+      route.push("/login");
     }
-  }, []);
+  }, [route, token]); // Make sure to add `token` as a dependency
+  
   
   const [user, setUser] = useState({
     email: "",
@@ -40,19 +65,22 @@ const login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("User login successfully");
-        //console.log(data.user); 
-        router.push("/profile");
+        console.log("data:" ,data.user);
+        route.push("/dashboard");
       } else {
         const errorData = await response.json();
         console.error("Login failed:", errorData.error);
         setError(errorData.error);
-        
       }
     } catch (err) {
+      alert("An error occurred. Please try again.");
       console.error("Error during login:", err);
     }
   };
+
   return (
+    <>
+    <Navbar/>
     <div className="w-full h-full py-10 bg-[url('/images/Meteor.svg')] bg-no-repeat">
       <div className="max-w-[400px] mx-auto bg-slate-800 p-8 text-center rounded-xl">
         <div className="avtar">
@@ -115,6 +143,8 @@ const login = () => {
         </a>
       </div>
     </div>
+    </>
+    
   );
 };
 

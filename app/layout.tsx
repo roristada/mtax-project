@@ -1,13 +1,10 @@
-"use client"
+"use client";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter,Kanit } from "next/font/google";
-import Navbar from "./components/Navbar";
-
-
+import { Inter, Kanit } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
-const kanit = Kanit({ subsets: ["latin"] , weight:["300"]});
+const kanit = Kanit({ subsets: ["latin"], weight: ["300"] });
 
 export const metadata: Metadata = {
   title: "Mtax",
@@ -19,13 +16,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
-    <html lang="en">
+    
+      <html lang="en">
       <body className={kanit.className}>
-        <Navbar/>
         <main>{children}</main>
-        
       </body>
     </html>
+   
+    
   );
 }
