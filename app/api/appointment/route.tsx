@@ -4,7 +4,8 @@ import nodemailer from "nodemailer";
 import { RowDataPacket } from "mysql2";
 
 export async function POST(req: Request) {
-  
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
   try {
     const {
       email,
@@ -20,21 +21,29 @@ export async function POST(req: Request) {
 
     const isRecaptchaValid = await verifyRecaptchaToken(recapt_token);
     if (!isRecaptchaValid) {
-      console.log("Invalid reCAPTCHA token")
+      console.log("Invalid reCAPTCHA token");
       return new NextResponse("Invalid reCAPTCHA token", { status: 400 });
     }
 
-    const connection = await pool.getConnection();
     const [checkRecords] = await connection.execute(
-      "SELECT * FROM appointment WHERE time_app=? AND date_app=? AND staff=? AND time_end=?",
-      [time_app, date_app, staff, time_end]
+      `SELECT * FROM appointment 
+       WHERE staff = ? 
+         AND (
+           (time_app < ? AND time_end > ?) OR 
+           (time_app < ? AND time_end > ?) OR 
+           (? BETWEEN time_app AND time_end) OR
+           (? BETWEEN time_app AND time_end)
+         )`,
+      [staff, time_end, time_app, time_app, time_end, time_app, time_end]
     );
 
-    if ((checkRecords as RowDataPacket).length > 0) {
-      connection.release();
-      return new NextResponse("Duplicate appointment record found", {
-        status: 400,
-      });
+    if ((checkRecords as RowDataPacket[]).length > 0) {
+      return new NextResponse(
+        "An appointment with overlapping times already exists.",
+        {
+          status: 400,
+        }
+      );
     }
 
     const [result] = await connection.execute(
@@ -63,6 +72,8 @@ export async function POST(req: Request) {
       message: "Appointment successfully scheduled. Confirmation email sent.",
     });
   } catch (error) {
+    await connection.rollback(); // Ensure to rollback the transaction on error
+    connection.release();
     console.error("Error Appointment :", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
@@ -134,7 +145,7 @@ export async function PUT(req: NextRequest) {
   }
 }
 async function verifyRecaptchaToken(token: string): Promise<boolean> {
-  const secretKey = process.env.RECAPTCHA_SECRET_KEY
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
   const response = await fetch(
     "https://www.google.com/recaptcha/api/siteverify",
     {
@@ -148,5 +159,4 @@ async function verifyRecaptchaToken(token: string): Promise<boolean> {
 
   const data = await response.json();
   return data.success;
-  
 }

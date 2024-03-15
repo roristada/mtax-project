@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import Navbar from "../components/Navbar";
 
 interface User {
   id: number;
@@ -14,58 +16,72 @@ function Profile() {
   const route = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
-
   useEffect(() => {
-    const token = document.cookie.replace(
-      /(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,
-      "$1"
-    );
+    const token = Cookies.get("token"); // Get token from cookies
     if (token) {
-      const decodedToken = jwt_decode(token) as User;
-      setUser(decodedToken);
+      try {
+        const decoded: User = jwt_decode(token);
+        setUser(decoded);
+        console.log(decoded);
+      } catch (error) {
+        // If token is invalid or expired
+        console.error("Invalid token:", error);
+        route.push("/login"); // Redirect to login page
+      }
+    } else {
+      route.push("/login"); // Redirect to login page if token not found
     }
-  }, []);
+  }, [route]);
 
   const handleLogout = () => {
-    // Clear the token by setting its expiration to the past
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    setUser(null); // Reset the user state to null after logout
+    // Clear the token
+    Cookies.remove("token"); // Use js-cookie or similar library
+    setUser(null);
     route.push("/");
   };
 
   if (user) {
     if (user.role === "admin") {
       return (
-        <div>
-          <div>Welcome Admin : {user.email}!</div>
-          <div className="my-5">
-          <Link
-              className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
-              href="/register"
-            >
-              Register
-            </Link>
-            <Link
-              className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
-              href="/appointment/manage"
-            >
-              Appointment Manange
-            </Link>
-            <Link
-              className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
-              href="/blog/post_blog"
-            >
-              Post-blog
-            </Link>
-            <Link
-              className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
-              href="/blog/manage_blog"
-            >
-              Manage-blog
-            </Link>
+        <>
+          <Navbar />
+          <div>
+            <div>Welcome Admin : {user.email}!</div>
+            <div className="my-5">
+              <Link
+                className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
+                href="/register"
+              >
+                Register
+              </Link>
+              <Link
+                className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
+                href="/appointment/manage"
+              >
+                Appointment Manange
+              </Link>
+              <Link
+                className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
+                href="/blog/post_blog"
+              >
+                Post-blog
+              </Link>
+              <Link
+                className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
+                href="/blog/manage_blog"
+              >
+                Manage-blog
+              </Link>
+              <Link
+                className="bg-blue-500 mx-4 hover:bg-blue-700  py-2 px-4 rounded-xl text-white text-l font-medium"
+                href="/dashboard/admin_db"
+              >
+                Dashboard
+              </Link>
+            </div>
+            <button onClick={handleLogout}>Logout</button>
           </div>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
+        </>
       );
     } else {
       return (
@@ -77,10 +93,7 @@ function Profile() {
       );
       // Render user components or redirect to user-specific pages
     }
-  } else {
-    return <div>Please login to access the content.</div>;
-    // Render login form or redirect to login page
-  }
+  } 
 }
 
 export default Profile;

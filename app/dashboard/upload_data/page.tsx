@@ -1,38 +1,47 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter } from 'next/router'
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { BarLoader } from "react-spinners";
 
-const UploadData = ({params}:{params:any}) => {
+const UploadData = ({ params }: { params: any }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const route = useRouter();
+
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+  };
+
   const [formPost, setFormPost] = useState({
-    company: "",
+    id: "",
+    // company: "",
+    staffname: "",
+    file: "",
     month: "",
     year: "",
-    staffname: "",
-    data_type: "",
-    file: "",
   });
   const [file, setFile] = useState(null);
   const [file_type, setFileType] = useState(false);
+  const [data, setData] = useState([]);
 
-  const handleFileChange = (event:any) => {
+  const handleFileChange = (event: any) => {
     const selectedFile = event.target.files[0];
     // Check if file is selected
     if (!selectedFile) return;
-  
+
     // Check file type (optional)
     if (
       !selectedFile.type.match(
         "text/csv|application/vnd.ms-excel|application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       )
     ) {
-      console.error(
-        "Invalid file type. Please select a CSV or Excel file."
-      );
+      console.error("Invalid file type. Please select a CSV or Excel file.");
       setFileType(false); // Update file type state
       setFile(null);
       return;
     }
-  
+
     // Update state with the selected file
     setFileType(true);
     setFile(selectedFile);
@@ -40,15 +49,23 @@ const UploadData = ({params}:{params:any}) => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    setIsLoading(true);
     const formData = new FormData();
-    formData.append("company", formPost.company);
+    formData.append("id", formPost.id);
+    //formData.append("company", formPost.company);
     formData.append("month", formPost.month);
     formData.append("year", formPost.year);
     formData.append("staffname", formPost.staffname);
-    formData.append("data_type", formPost.data_type);
+    formData.append("date_upload", new Date().toISOString());
     if (file) {
       formData.append("file", file);
     }
+
+    // Use array destructuring to iterate through formData entries
+    for (const [key, value] of Array.from(formData.entries())) {
+      console.log(`${key}: ${value instanceof File ? value.name : value}`);
+    }
+
     try {
       const response = await fetch("/api/upload_data", {
         method: "POST",
@@ -56,21 +73,31 @@ const UploadData = ({params}:{params:any}) => {
       });
       if (response.ok) {
         const data = await response.json(); // Parse response body as JSON
-        console.log(data); // Handle parsed response data
+        console.log(data); 
+        alert("File Upload Succesful")
+        route.push("/dashboard/admin_db")
       } else {
         throw new Error("Error uploading data");
       }
     } catch (err) {
       console.error("Error :", err);
+    } finally {
+      setIsLoading(false);
     }
   };
-  const isFormIncomplete =
-    !formPost.company ||
-    !formPost.month ||
-    !formPost.year ||
-    !formPost.staffname ||
-    !formPost.data_type ||
-    !file;
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch("/api/getData");
+      const result = await res.json();
+      setData(result);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="container mx-auto w-[80%]">
@@ -78,32 +105,32 @@ const UploadData = ({params}:{params:any}) => {
         onSubmit={handleSubmit}
         className="max-w-md mx-auto mt-10 border p-10 rounded-md shadow-md"
       >
-        {/* Your form inputs */}
         <div className="mb-5">
           <label className="block mb-2 text-sm font-medium text-gray-900">
             Company name
           </label>
-          <input
-            type="text"
-            id="base-input"
-            value={formPost.company}
+          <select
+            id="id"
+            value={formPost.id}
             onChange={(e) => {
-              setFormPost({ ...formPost, company: e.target.value });
+              setFormPost({ ...formPost, id: e.target.value });
             }}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          />
+          >
+            {" "}
+            <option selected>Choose Company</option>
+            {data.map((item: any) => (
+              <option key={item.id} value={item.id}>
+                {item.company_name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-5">
-          <div className="grid md:grid-cols-2 gap-10">
+          <div className="mb-2">
             <label className="block mb-2 text-sm font-medium text-gray-900">
               Month
             </label>
-            <label className="block mb-2 text-sm font-medium text-gray-900">
-              Year
-            </label>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-10">
             <input
               type="text"
               id="base-input"
@@ -113,6 +140,11 @@ const UploadData = ({params}:{params:any}) => {
               }}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             />
+          </div>
+          <div className="mb-2">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Year
+            </label>
             <input
               type="text"
               id="base-input"
@@ -139,24 +171,26 @@ const UploadData = ({params}:{params:any}) => {
           />
         </div>
 
-        <div className="mb-5">
+        {/* <div className="mb-5">
           <label className="block mb-2 text-sm font-medium text-gray-900">
             Select your Data type
           </label>
           <select
-            id="countries"
+            id="data_type"
             value={formPost.data_type}
             onChange={(e) => {
               setFormPost({ ...formPost, data_type: e.target.value });
             }}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option>Data Employee</option>
-            <option>Summary</option>
-            <option>Profit</option>
-            <option>Loss</option>
+            {" "}
+            <option selected>Choose Data</option>
+            <option value={"Employee"}>Employee</option>
+            <option value={"Income"}>Income</option>
+            <option value={"Expenses"}>Expenses</option>
+            <option value={"Tax"}>Tax</option>
           </select>
-        </div>
+        </div> */}
         <div className="">
           <input
             onChange={handleFileChange}
@@ -172,17 +206,28 @@ const UploadData = ({params}:{params:any}) => {
         </div>
 
         {/* Your submit button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center items-center">
           <button
             type="submit"
-            disabled={isFormIncomplete} // Disable the button if the form is incomplete
-            className={`mt-5 text-white ${
-              isFormIncomplete ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300'
-            } font-medium rounded-lg text-sm w-full sm:w-auto px-20 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+            className={`mt-5 text-white font-medium rounded-lg text-sm w-full sm:w-auto px-20 py-2.5 text-center ${
+              isLoading
+                ? "bg-gray-500"
+                : "dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            }`}
+            disabled={isLoading}
           >
-            Submit
+            {isLoading ? "Uploading..." : "Submit"}
           </button>
         </div>
+        {isLoading && (
+          <div className="flex justify-center mt-5">
+            <BarLoader
+              color="#00FF00"
+              loading={isLoading}
+              cssOverride={override}
+            />
+          </div>
+        )}
       </form>
     </div>
   );

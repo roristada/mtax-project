@@ -67,7 +67,7 @@ const register = () => {
   };
 
   return (
-    <div className="w-full h-full py-10 bg-[url('/images/Meteor.svg')] bg-no-repeat">
+    <div className="w-full py-15 bg-[url('/images/Meteor.svg')] bg-no-repeat ">
       <div className="w-[60%] max-w-5xl mx-auto bg-slate-800 p-8 text-center rounded-xl">
         <div className="avtar">
           <Image

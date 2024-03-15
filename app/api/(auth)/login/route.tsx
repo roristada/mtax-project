@@ -13,11 +13,13 @@ export async function POST(req: NextRequest) {
         const { email, password } = await req.json();
         const connection = await pool.getConnection();
         const [result] = await connection.query<RowDataPacket[]>('SELECT * FROM users WHERE email = ?', [email]);
+        await connection.release();
         if (!result || result.length === 0) {
             return NextResponse.json({ error: "Email or password not found" }, { status: 401 }); // 401 Unauthorized status code for failed login
         }
 
         const user = result[0];
+        console.log(user)
 
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
@@ -25,12 +27,13 @@ export async function POST(req: NextRequest) {
         }
 
         const payload = {
-            id: user.user_ID,
+            id: user.id,
             email: user.email,
+            company:user.company_name,
             role: user.role,
           }
 
-          const token = jwt.sign(payload, secretKey, { expiresIn: '1hr' })
+          const token = jwt.sign(payload, secretKey, { expiresIn: '3hr' })
 
         const response = NextResponse.json({ message: 'Login successful', user, token });
         response.cookies.set('token', token);
