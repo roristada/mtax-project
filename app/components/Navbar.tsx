@@ -103,7 +103,7 @@ const Navbar = () => {
               <li className="my-auto">
                 {user.role === "admin" ? (
                   <span className="text-gray-900 mr-2">
-                    <Link href={"/profile"}>Admin:{user.email}</Link>
+                    <Link href={"/dashboard/admin_db"}>Admin:{user.email}</Link>
                   </span>
                 ) : (
                   <Link href={"/dashboard"}>

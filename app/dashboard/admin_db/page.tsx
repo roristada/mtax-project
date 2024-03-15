@@ -204,15 +204,6 @@ const admin_db = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center bg-slate-600 rounded-lg p-4 text-white hover:bg-slate-700 transition-colors duration-300">
-                    <div className="flex-1">
-                      <ApartmentIcon fontSize="large" />
-                    </div>
-                    <div className="flex-1">
-                      <h2 className="text-xl font-semibold">20</h2>
-                      <p>Companies</p>
-                    </div>
-                  </div>
                 </div>
                 <div
                   style={{

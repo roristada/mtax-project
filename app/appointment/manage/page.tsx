@@ -2,12 +2,14 @@
 
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 interface Appointment {
   id_appointment: number;
   status_app: string;
   // other properties of the appointment object
 }
 const manage = () => {
+  const route = useRouter()
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedAppointment, setSelectedAppointment] =
@@ -97,6 +99,9 @@ const manage = () => {
       }
     }
   };
+  const handClick = async () =>{
+    route.push("./manage/admin-app/")
+  }
 
   return (
     <div className=" w-full h-full min-h-[800px] bg-slate-700 py-10">
@@ -150,9 +155,15 @@ const manage = () => {
                         {item.id_appointment}
                       </td>
                       <td className="px-6 py-4">{item.name}</td>
-                      <td className="px-6 py-4">{dayjs(item.date_app).format('YYYY-MM-DD')}</td>
-                      <td className="px-6 py-4">{dayjs(item.time_app).format('HH:mm')}</td>
-                      <td className="px-6 py-4">{dayjs(item.time_end).format('HH:mm')}</td>
+                      <td className="px-6 py-4">
+                        {dayjs(item.date_app).format("YYYY-MM-DD")}
+                      </td>
+                      <td className="px-6 py-4">
+                        {dayjs(item.time_app).format("HH:mm")}
+                      </td>
+                      <td className="px-6 py-4">
+                        {dayjs(item.time_end).format("HH:mm")}
+                      </td>
                       <td className="px-6 py-4">{item.staff}</td>
                       <td className="px-6 py-4">{item.note_app}</td>
                       <td className="px-6 py-4">{item.status_app}</td>
@@ -210,6 +221,12 @@ const manage = () => {
             )}
           </div>
         </div>
+        <div className="flex justify-end">
+          <button className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mr-4" onClick={handClick}>
+          Admin
+        </button>
+        </div>
+        
       </div>
     </div>
   );

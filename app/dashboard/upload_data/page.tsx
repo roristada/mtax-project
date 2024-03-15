@@ -1,10 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { BarLoader } from "react-spinners";
 
 const UploadData = ({ params }: { params: any }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const route = useRouter();
 
   const override = {
     display: "block",
@@ -16,7 +17,6 @@ const UploadData = ({ params }: { params: any }) => {
     id: "",
     // company: "",
     staffname: "",
-    data_type: "",
     file: "",
     month: "",
     year: "",
@@ -57,7 +57,6 @@ const UploadData = ({ params }: { params: any }) => {
     formData.append("year", formPost.year);
     formData.append("staffname", formPost.staffname);
     formData.append("date_upload", new Date().toISOString());
-    formData.append("data_type", formPost.data_type);
     if (file) {
       formData.append("file", file);
     }
@@ -74,7 +73,9 @@ const UploadData = ({ params }: { params: any }) => {
       });
       if (response.ok) {
         const data = await response.json(); // Parse response body as JSON
-        console.log(data); // Handle parsed response data
+        console.log(data); 
+        alert("File Upload Succesful")
+        route.push("/dashboard/admin_db")
       } else {
         throw new Error("Error uploading data");
       }
@@ -170,7 +171,7 @@ const UploadData = ({ params }: { params: any }) => {
           />
         </div>
 
-        <div className="mb-5">
+        {/* <div className="mb-5">
           <label className="block mb-2 text-sm font-medium text-gray-900">
             Select your Data type
           </label>
@@ -189,7 +190,7 @@ const UploadData = ({ params }: { params: any }) => {
             <option value={"Expenses"}>Expenses</option>
             <option value={"Tax"}>Tax</option>
           </select>
-        </div>
+        </div> */}
         <div className="">
           <input
             onChange={handleFileChange}

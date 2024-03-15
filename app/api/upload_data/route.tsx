@@ -394,7 +394,6 @@ export async function POST(req: Request) {
     const year = formData.get("year") as string;
     const date_upload = formData.get("date_upload") as string;
     const staffname = formData.get("staffname") as string;
-    const data_type = formData.get("data_type") as string;
     const file = formData.get("file");
 
     if (!file || !(file instanceof Blob)) {
@@ -533,13 +532,12 @@ export async function POST(req: Request) {
       //company,
       date_upload,
       staffname,
-      data_type,
       fileName,
     });
 
     return NextResponse.json({
       message: "OK",
-      data: { id, date_upload, staffname, data_type, fileName },
+      data: { id, date_upload, staffname,  fileName },
     });
   } catch (error) {
     console.error("Error handling request:", error);

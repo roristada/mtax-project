@@ -10,6 +10,7 @@
     "server": "server.ts"
   },
   "dependencies": {
+    "@date-io/dayjs": "^3.0.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.11",
@@ -19,6 +20,7 @@
     "@mui/x-data-grid-generator": "^6.19.6",
     "@mui/x-data-grid-pro": "^6.19.6",
     "@mui/x-date-pickers": "^6.16.0",
+    "@mui/x-date-pickers-pro": "^6.19.7",
     "@types/bcrypt": "^5.0.0",
     "@types/dotenv": "^8.2.0",
     "@types/jsonwebtoken": "^9.0.3",
