@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
 interface User {
   id: number;
@@ -48,6 +50,8 @@ const Home = () => {
       <Header />
       <About />
       <Services/>
+      <Contact/>
+      <Footer/>
     </main>
   );
 };

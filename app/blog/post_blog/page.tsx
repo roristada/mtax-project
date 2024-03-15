@@ -1,8 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Editor from "@/app/components/Editor";
+import { useRouter } from "next/navigation";
 
 const post_blog = () => {
+  const [file, setFile] = useState(null);
+  const [file_type, setFileType] = useState(false);
+  const route = useRouter();
   const [formPost, setformPost] = useState({
     header: "",
     detail: "",
@@ -11,33 +15,64 @@ const post_blog = () => {
     //datepost: "",
   });
 
+  const handleFileChange = (event: any) => {
+    const selectedFile = event.target.files[0];
+    // Check if file is selected
+    if (!selectedFile) return;
+
+    // Check file type (optional)
+    if (
+      !selectedFile.type.match(
+        "image/jpeg|image/png|image/gif|image/bmp|image/svg+xml"
+      )
+    ) {
+      console.error("Invalid file type. Please select an image file.");
+      setFileType(false); // Update file type state
+      setFile(null);
+      return;
+    }
+
+    // Update state with the selected file
+    setFileType(true);
+    setFile(selectedFile);
+  };
+
   const handleEditorContentChange = (html: string) => {
     setformPost({ ...formPost, detail: html });
   };
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    //const currentDate = new Date();
-    //const formattedDate = currentDate.toISOString(); // Adjust the format as needed
-
-    // Update the formPost state with the current date
-    //setformPost({ ...formPost, datepost: formattedDate });
-
+  
+    const formData = new FormData();
+    formData.append('header', formPost.header);
+    formData.append('detail', formPost.detail);
+    formData.append('staff', formPost.staff);
+    if (file) {
+      formData.append("file", file);
+    }
+    for (const [key, value] of Array.from(formData.entries())) {
+      console.log(`${key}: ${value instanceof File ? value.name : value}`);
+    }
+    // Check if fileInputRef.current is not null and if a file is selected
+    
+  
     try {
-      const response = await fetch("/api/post-blog", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formPost),
+      const response = await fetch('/api/post-blog', {
+        method: 'POST',
+        body: formData, // Sending the form data
       });
+  
       if (response.ok) {
-        console.log("Post successfully");
+        console.log('Post successfully');
+        alert("Post Upload Succesful")
+        route.push("/dashboard/admin_db")
+        // Optionally, clear the form or provide feedback to the user here
       } else {
-        console.error("Post failed:", response.statusText);
+        console.error('Post failed:', response.statusText);
       }
     } catch (err) {
-      console.error("Error :", err);
+      console.error('Error:', err);
     }
   };
 
@@ -84,14 +119,12 @@ const post_blog = () => {
               <label className="block mb-1 text-lg">Images:</label>
               <input
                 type="file"
-                placeholder=""
-                value={formPost.image}
-                onChange={(e) => {
-                  setformPost({ ...formPost, image: e.target.value });
-                }}
-                className=" max-w-2xl mx-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                onChange={handleFileChange}
+                
+                className="max-w-2xl mx-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
             </div>
+            
             <div className="max-w-2xl mx-auto my-2 flex justify-center">
               <button
                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg mt-3 text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

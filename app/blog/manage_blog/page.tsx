@@ -1,10 +1,50 @@
 "use client";
+import Sidebar from "@/app/components/Sidebar";
 import { useState, useEffect } from "react";
+
+interface Appointment {
+  id_blog: number;
+  
+}
 
 const manage_blog = () => {
   const [loading, setLoading] = useState(true);
-
+  const [showPopup, setShowPopup] = useState(false);
   const [data, setData] = useState([]);
+  const [selectedPost, setSelectedPost] =
+    useState<Appointment | null>(null);
+
+   
+
+  const handleManageClick = (post: any) => {
+    setSelectedPost(post);
+    setShowPopup(true);
+  };
+  const handleDlete = async () => {
+    if (selectedPost) {
+      try {
+        const response = await fetch("/api/post-blog/", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id:selectedPost.id_blog }),
+        });
+        // Handle successful deletion here, for example, by updating the UI or refetching data.
+        if (response.ok) {
+          // Appointment deleted successfully, refetch data to trigger rerender
+          fetchData();
+          setShowPopup(false);
+        } else {
+          console.error("Failed to delete appointment:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error deleting appointment:", error);
+      }
+    }
+  };
+
+  console.log(selectedPost?.id_blog)
   const fetchData = async () => {
     try {
       const response = await fetch("/api/post-blog");
@@ -25,8 +65,9 @@ const manage_blog = () => {
   
 
   return (
-    <div className=" w-full h-full min-h-[800px] bg-slate-700 py-10">
-      <div className=" max-w-7xl h-full bg-white mx-auto rounded-xl p-3">
+    <div className=" w-full h-full min-h-[800px] bg-slate-700  flex">
+     <Sidebar/>
+      <div className="flex-1 max-w-7xl h-full bg-white mx-auto rounded-xl p-3 mt-8">
         <h2 className=" text-xl font-medium text-center">Manage Blog</h2>
         <div>
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg my-4">
@@ -74,7 +115,7 @@ const manage_blog = () => {
                       <td className="px-6 py-4">
                         <button
                           type="button"
-                          
+                          onClick={() => handleManageClick(post)}
                           className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                         >
                           Manage
@@ -83,7 +124,30 @@ const manage_blog = () => {
                     </tr>
                   ))}
                 </tbody>
-                
+                {showPopup  && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-white p-8 rounded-2xl shadow-md mx-auto">
+                      <h2 className="text-xl font-medium mb-4 text-slate-900">
+                        Manage Appointment
+                      </h2>
+                      
+                      
+                      <button
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md mr-4"
+                        onClick={() => handleDlete()}
+                      >
+                        Delete
+                      </button>
+                      
+                      <button
+                        className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-md"
+                        onClick={() => setShowPopup(false)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                )}
               </table>
             )}
           </div>
